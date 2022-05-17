@@ -2,7 +2,11 @@
 #include <Win32.cpp>
 
 int main() {
-    initMainWindow(GetModuleHandle(0));
+    initMainWindow();
+
+    while (checkForWindowMessage()) {
+        
+    }
 
     return 0;
 }

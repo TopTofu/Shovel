@@ -6,7 +6,17 @@
 #include <Util.cpp>
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
-    return DefWindowProc(window, message, wParam, lParam);
+    switch (message) {
+        case WM_CLOSE: {
+            PostQuitMessage(0); // this will run into our checkForWindowMessage method which results into the main loop to end
+        } break;
+        
+        default: {
+           return DefWindowProc(window, message, wParam, lParam); 
+        }
+    }
+
+    return 0;
 }
 
 void initOpenGL() {
@@ -43,7 +53,9 @@ void initOpenGL() {
     glEnable(GL_TEXTURE_2D);
 }
 
-void initMainWindow(HINSTANCE instance) {
+void initMainWindow() {
+    HINSTANCE instance = GetModuleHandle(0);
+
     MainWindow = {};
 
     MainWindow.width = DEFAULT_WINDOW_WIDTH;
@@ -84,4 +96,17 @@ void initMainWindow(HINSTANCE instance) {
     // toTrack.dwFlags = TME_LEAVE;
     // toTrack.hwndTrack = MainWindow.handle;
     // TrackMouseEvent(&toTrack);
+}
+
+bool checkForWindowMessage() {
+    MSG message;
+
+    PeekMessage(&message, NULL, 0, 0, PM_REMOVE);
+
+    TranslateMessage(&message);
+    DispatchMessage(&message);
+
+    if (message.message == WM_QUIT) return false;
+    
+    return true;
 }
