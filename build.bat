@@ -10,7 +10,7 @@ set CommonLinkerFlags= -out:Main.exe "opengl32.lib" "user32.lib" "gdi32.lib"
 if not exist bin mkdir bin
 pushd bin
 
-cl %CommonCompilerFlags% "..\Main.cpp" /link %CommonLinkerFlags% >nul
+cl %CommonCompilerFlags% "..\Main.cpp" /link %CommonLinkerFlags%
 
 popd
 
