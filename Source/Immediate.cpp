@@ -15,9 +15,11 @@ void flush() {
 }
 
 void immediateQuad(vec2 o, vec2 s0, vec2 s1, Color color) {
+    beginQuads();
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(o.x, o.y);
     glVertex2f(o.x + s0.x, o.y + s0.y);
     glVertex2f(o.x + s0.x + s1.x, o.y + s0.y + s1.y);
     glVertex2f(o.x + s1.x, o.y + s1.y);
+    flush();
 }

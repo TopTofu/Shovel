@@ -4,11 +4,41 @@
 #include <windows.h>
 #include <Window.cpp>
 #include <Util.cpp>
+#include <ui.cpp>
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_CLOSE: {
             PostQuitMessage(0); // this will run into our checkForWindowMessage method which results into the main loop to end
+        } break;
+
+        case WM_MOUSEMOVE: {
+            ui.mx = LOWORD(lParam);
+            ui.my = HIWORD(lParam);
+        } break;
+
+        case WM_LBUTTONDOWN: {
+            ui.leftDown = true;
+        } break;
+
+        case WM_LBUTTONUP: {
+            ui.leftUp = true;
+        } break;
+
+        case WM_RBUTTONDOWN: {
+
+        } break;
+
+        case WM_RBUTTONUP: {
+
+        } break;
+
+        case WM_MBUTTONDOWN: {
+
+        } break;
+
+        case WM_MBUTTONUP: {
+
         } break;
         
         default: {
