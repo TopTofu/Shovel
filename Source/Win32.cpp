@@ -8,6 +8,12 @@
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
+        case WM_SIZE: {
+            MainWindow.width = LOWORD(lParam);
+            MainWindow.height = HIWORD(lParam);
+            glViewport(0, 0, MainWindow.width, MainWindow.height);
+        } break;
+
         case WM_CLOSE: {
             PostQuitMessage(0); // this will run into our checkForWindowMessage method which results into the main loop to end
         } break;
