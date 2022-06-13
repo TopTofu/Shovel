@@ -13,6 +13,8 @@ int main() {
     initMainWindow();
 
     float i = 0;
+    float x = 50;
+    float y = 50;
 
     layout.baseButton = {0.3, 0.5, 1, 1};
     layout.lightButton = lighten(layout.baseButton);
@@ -26,7 +28,7 @@ int main() {
 
         uiFrameBegin();
         
-        if (buttonOutline("click", callback, 50, 50, 130, 50)) 
+        if (buttonDrag("click", callback, &x, &y, 130, 50)) 
             callback();
         
         uiFrameEnd();

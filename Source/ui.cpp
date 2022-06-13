@@ -14,6 +14,7 @@ struct InterfaceState {
     bool middleDown, middleUp;
 
     int mx, my;
+    int dragX, dragY;
 
     InterfaceID active;
     InterfaceID hot;
@@ -75,15 +76,44 @@ bool buttonLogic(void* id, bool over) {
     return result;
 }
 
+// same as above but return true on the left down
+bool buttonLogicDown(void *id, bool over) {
+    bool result = false;
+
+    if (!anyActive()) {
+        if (over) setHot(id);
+        if (isHot(id) && ui.leftDown) {
+            setActive(id);
+            result = true;
+        }
+    }
+
+    if (isActive(id)) {
+        if (over) setHot(id);
+        if (ui.leftUp) clearActive();
+    }
+
+    return result;
+}
+
 bool inRect(int x, int y, int w, int h)
 {
-   return (ui.mx >= x && ui.mx <= x + w && ui.my >= y && ui.my <= y + h);
+    return (ui.mx >= x && ui.mx <= x + w && ui.my >= y && ui.my <= y + h);
 }
 
 bool button(char* label, void* id, float x, float y, float w, float h) {
     quad({x, y}, {w, 0}, {0, h}, isHot(id) ? layout.lightButton : layout.baseButton);
 
     return buttonLogic(id, inRect(x, y, w, h));
+}
+
+bool buttonDrag(char* label, void* id, float* x, float* y, float w, float h) {
+    if (buttonLogicDown(id, inRect(*x, *y, w, h))) {
+        *x += ui.dragX;
+        *y += ui.dragY;
+    }
+
+    return button(label, id, *x, *y, w, h);
 }
 
 bool buttonOutline(char* label, void* id, float x, float y, float w, float h) {

@@ -19,6 +19,9 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
         } break;
 
         case WM_MOUSEMOVE: {
+            ui.dragX = LOWORD(lParam) - ui.mx;            
+            ui.dragY = HIWORD(lParam) - ui.my;            
+            
             ui.mx = LOWORD(lParam);
             ui.my = HIWORD(lParam);
         } break;
