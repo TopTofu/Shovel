@@ -1,13 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <Win32.cpp>
-#include <ui.cpp>
+#include <ui.c>
 #include <Immediate.cpp>
-
-void callback() {
-    static int x = 0;
-    printf("%i\n", ++x);
-}
+#include <Font.cpp>
 
 int main() {
     initMainWindow();
@@ -16,8 +12,8 @@ int main() {
     float x = 50;
     float y = 50;
 
-    layout.baseButton = {0.3, 0.5, 1, 1};
-    layout.lightButton = lighten(layout.baseButton);
+    initFonts("Resources/Fonts/");
+    layout.font = getFont("Bahnschrift_Regular");
 
     while (checkForWindowMessage()) {
         glClearColor(0.1, 0.4, 0.4, 0.0);
@@ -27,9 +23,21 @@ int main() {
         i++;
 
         uiFrameBegin();
+
+        static char* myID = ":D";
         
-        if (buttonDrag("click", callback, &x, &y, 130, 50)) 
-            callback();
+        layout.buttonBase = {0.3, 0.5, 1, 1};
+        drag(myID, &x, &y, 130, 50);
+        button("drag", myID, x, y, 130, 50);
+
+        layout.buttonBase = {1, 0.5, 0.3, 1};
+        if (button("to right", ID2(myID), 50, 300, 130, 50)) {
+            layout.textPadX += 5;
+        }
+
+        if (button("to left", ID3(myID), 300, 300, 130, 50)) {
+            layout.textPadX -= 5;
+        }
         
         uiFrameEnd();
 

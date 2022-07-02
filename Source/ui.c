@@ -2,6 +2,7 @@
 
 #include <Vector.cpp>
 #include <Immediate.cpp>
+#include <Font.cpp>
 
 struct InterfaceID {
     void* id;
@@ -25,8 +26,11 @@ struct InterfaceState {
 struct InterfaceLayout {
     int outlinePixels = 3;
     
-    Color baseButton = {1, 0.5, 0.5, 1};
-    Color lightButton = {1, 0.75, 0.75, 1};
+    Color buttonBase = {1, 0.5, 0.5, 1};
+    BitmapFontInfo* font;
+
+    int textPadX = 5;
+    int textPadY = 5;
 };
 
 InterfaceState ui;
@@ -36,6 +40,9 @@ InterfaceLayout layout;
 #define isHot(id) (id == ui.hot.id)
 #define isActive(id) (id == ui.active.id)
 
+#define ID2(id) ((char*)id + 1)
+#define ID3(id) ((char*)id + 2)
+#define ID4(id) ((char*)id + 3)
 
 void clearUI() {
     ui.rightDown = ui.rightUp = false;
@@ -102,27 +109,43 @@ bool inRect(int x, int y, int w, int h)
 }
 
 bool button(char* label, void* id, float x, float y, float w, float h) {
-    quad({x, y}, {w, 0}, {0, h}, isHot(id) ? layout.lightButton : layout.baseButton);
+    quad({x, y}, {w, 0}, {0, h}, isHot(id) ? lighten(layout.buttonBase) : layout.buttonBase);
+    
+    if (label) 
+        drawText(layout.font, label, x + layout.textPadX, y + layout.textPadY, 1, {0, 0, 0, 1});
 
     return buttonLogic(id, inRect(x, y, w, h));
 }
 
-bool buttonDrag(char* label, void* id, float* x, float* y, float w, float h) {
+bool drag(void* id, float* x, float* y, float w, float h) {
     if (buttonLogicDown(id, inRect(*x, *y, w, h))) {
-        *x += ui.dragX;
-        *y += ui.dragY;
+        // if we press left down, ui.drag will be the offset between the cursor and the rects position
+        ui.dragX = *x - ui.mx;
+        ui.dragY = *y - ui.my;
     }
 
-    return button(label, id, *x, *y, w, h);
+    if (isActive(id)) {
+        // while the rect is active, move the rects position to the cursor, while considering the offset
+        // and if the rect is actually moved, return true
+        if (ui.mx + ui.dragX != *x || ui.my + ui.dragY != *y) {
+            *x = ui.mx + ui.dragX;
+            *y = ui.my + ui.dragY;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool buttonOutline(char* label, void* id, float x, float y, float w, float h) {
-    quadOutline({x, y}, {w, 0}, {0, h}, isHot(id) ? layout.lightButton : layout.baseButton, darken(layout.baseButton), layout.outlinePixels);
+    quadOutline({x, y}, {w, 0}, {0, h}, isHot(id) ? lighten(layout.buttonBase) : layout.buttonBase, darken(layout.buttonBase), layout.outlinePixels);
 
     return buttonLogic(id, inRect(x, y, w, h));
 }
 
 void uiFrameBegin() {
+    glDisable(GL_DEPTH_TEST);
+
     ui.hot.id = ui.hot_to_be.id;
 
     ui.hot_to_be.id = NULL; 

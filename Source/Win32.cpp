@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <Window.cpp>
 #include <Util.cpp>
-#include <ui.cpp>
+#include <ui.c>
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
@@ -19,9 +19,6 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
         } break;
 
         case WM_MOUSEMOVE: {
-            ui.dragX = LOWORD(lParam) - ui.mx;            
-            ui.dragY = HIWORD(lParam) - ui.my;            
-            
             ui.mx = LOWORD(lParam);
             ui.my = HIWORD(lParam);
         } break;
@@ -83,8 +80,8 @@ void initOpenGL() {
 
     glViewport(0, 0, MainWindow.width, MainWindow.height);
 
-    glEnable(GL_DEPTH_TEST); //@TODO for a 2D game i think this shouldnt be enabled since we might want to sort the z order ourselfs
-    glDepthFunc(GL_LESS);
+    // glEnable(GL_DEPTH_TEST); //@TODO for a 2D game i think this shouldnt be enabled since we might want to sort the z order ourselves
+    // glDepthFunc(GL_LESS);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -148,4 +145,28 @@ bool checkForWindowMessage() {
     if (message.message == WM_QUIT) return false;
     
     return true;
+}
+
+int findAllFilesInDirectory(char* directory, char** fileNames, int maxCount, char* fileFormat = "*.*") {
+    WIN32_FIND_DATA data;
+
+    char* dir = new char[strlen(directory) + strlen(fileFormat)];
+    strcpy(dir, directory);
+    strcpy(dir + strlen(directory), fileFormat);
+
+    HANDLE find = FindFirstFile(dir, &data);
+    delete[] dir;
+
+    int i = 0;
+    if (find != INVALID_HANDLE_VALUE) {
+        do {
+            int len = strlen(data.cFileName);
+            fileNames[i] = new char[len + 1];
+            strcpy(fileNames[i], data.cFileName);
+            i++;
+        } while (FindNextFile(find, &data) && i < maxCount);
+        FindClose(find);
+    }
+
+    return i;
 }
