@@ -26,19 +26,22 @@ int main() {
 
         static char* myID = ":D";
         
-        layout.buttonBase = {0.3, 0.5, 1, 1};
-        drag(myID, &x, &y, 130, 50);
-        button("drag", myID, x, y, 130, 50);
+        // layout.buttonBase = {0.3, 0.5, 1, 1};
+        // drag(myID, &x, &y, 130, 50);
+        // button("drag", myID, x, y, 130, 50);
 
-        layout.buttonBase = {1, 0.5, 0.3, 1};
-        if (button("to right", ID2(myID), 50, 300, 130, 50)) {
-            layout.textPadX += 5;
-        }
+        // layout.buttonBase = {1, 0.5, 0.3, 1};
+        // if (button("to right", ID2(myID), 50, 300, 130, 50)) {
+        //     layout.textPadX += 5;
+        // }
 
-        if (button("to left", ID3(myID), 300, 300, 130, 50)) {
-            layout.textPadX -= 5;
-        }
+        // if (buttonOutline("to left", ID3(myID), 300, 300, 130, 50)) {
+        //     layout.textPadX -= 5;
+        // }
         
+        static float someFloat = 5;
+        slider(&someFloat, 100, 500, 300, &someFloat, 0, 10);
+
         uiFrameEnd();
 
         SwapBuffers(MainWindow.deviceContext);

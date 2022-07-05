@@ -27,6 +27,7 @@ struct InterfaceLayout {
     int outlinePixels = 3;
     
     Color buttonBase = {1, 0.5, 0.5, 1};
+    Color sliderBase = {0.2, 0.2, 0.2, 1};
     BitmapFontInfo* font;
 
     int textPadX = 5;
@@ -139,8 +140,42 @@ bool drag(void* id, float* x, float* y, float w, float h) {
 
 bool buttonOutline(char* label, void* id, float x, float y, float w, float h) {
     quadOutline({x, y}, {w, 0}, {0, h}, isHot(id) ? lighten(layout.buttonBase) : layout.buttonBase, darken(layout.buttonBase), layout.outlinePixels);
+    return button(label, id, x, y, w, h);
+}
 
-    return buttonLogic(id, inRect(x, y, w, h));
+bool slider(void* id, float x, float y, float w, float* value, float min, float max) {
+    quad({x, y}, {0, 5}, {w, 0}, layout.sliderBase);
+
+    float slideX = (*value) / (max - min) * w + x; 
+    float slideY = y;
+
+    float cursorH = 15;
+    float cursorW = 10;
+
+    // draw cursor
+    quad({slideX, slideY - cursorH / 2.f}, {cursorW, 0}, {0, cursorH}, layout.buttonBase);
+    
+    drag(id, &slideX, &slideY, cursorW, cursorH);
+
+    slideX = clamp(slideX, x, x + w);
+    float temp = (slideX - x) * (max - min) / w;
+    
+    if (temp != *value) {
+        *value = temp;
+        return true;
+    }
+
+    bool with_label = true;
+    if (with_label) {
+        char* format = "%.2f";
+        int len = snprintf(NULL, 0, format, *value);
+        char *text = new char[len + 1];
+        snprintf(text, len + 1, format, *value);
+        drawText(layout.font, text, slideX, y, 1, {0, 0, 0, 1});
+        delete[] text;
+    }
+
+    return false;
 }
 
 void uiFrameBegin() {
