@@ -39,8 +39,18 @@ int main() {
         //     layout.textPadX -= 5;
         // }
         
-        static float someFloat = 5;
-        slider(&someFloat, 100, 500, 300, &someFloat, 0, 10);
+        static float red = 1;
+        slider(&red, 100, 500, 100, &red, 0, 1);
+
+        static float green = 1;
+        slider(&green, 100, 525, 100, &green, 0, 1);
+
+        static float blue = 1;
+        slider(&blue, 100, 550, 100, &blue, 0, 1);
+
+        quad({30, 30}, {300, 0}, {0, 300}, {red, green, blue, 1});
+        
+
 
         uiFrameEnd();
 

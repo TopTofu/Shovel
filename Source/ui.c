@@ -154,7 +154,7 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
 
     // draw cursor
     quad({slideX, slideY}, {cursorW, 0}, {0, cursorH}, layout.buttonBase);
-    
+
     drag(id, &slideX, &slideY, cursorW, cursorH);
 
     slideX = clamp(slideX, x, x + w);
