@@ -40,13 +40,13 @@ int main() {
         // }
         
         static float red = 1;
-        slider(&red, 100, 500, 100, &red, 0, 1);
+        slider(&red, 100, 400, 100, &red, 0, 10);
 
         static float green = 1;
-        slider(&green, 100, 525, 100, &green, 0, 1);
+        slider(&green, 100, 440, 100, &green, 0, 1);
 
         static float blue = 1;
-        slider(&blue, 100, 550, 100, &blue, 0, 1);
+        slider(&blue, 100, 480, 100, &blue, 0, 1);
 
         quad({30, 30}, {300, 0}, {0, 300}, {red, green, blue, 1});
         

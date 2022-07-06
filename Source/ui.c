@@ -167,7 +167,8 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
         int len = snprintf(NULL, 0, format, *value);
         char *text = new char[len + 1];
         snprintf(text, len + 1, format, *value);
-        drawText(layout.font, text, slideX, y, 1, {0, 0, 0, 1});
+        int yOffset = 5;
+        drawText(layout.font, text, slideX, y + yOffset, 1, {0, 0, 0, 1});
         delete[] text;
     }
 
