@@ -32,6 +32,8 @@ struct InterfaceLayout {
 
     int textPadX = 5;
     int textPadY = 5;
+
+    int sliderTextPrecision = 2;
 };
 
 InterfaceState ui;
@@ -143,6 +145,14 @@ bool buttonOutline(char* label, void* id, float x, float y, float w, float h) {
     return button(label, id, x, y, w, h);
 }
 
+bool buttonToggle(char* label1, char* label2, void* id, float x, float y, float w, float h, bool* val) {
+    bool result = button(*val ? label1 : label2, id, x, y, w, h);
+    if (result) {
+        *val = !*val;
+    }
+
+    return result;
+}
 
 bool slider(void* id, float x, float y, float w, float* value, float min, float max, char* label = "") {
     quad({x, y}, {0, 5}, {w, 0}, layout.sliderBase);
@@ -159,10 +169,12 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
     // draw value text
     bool with_text = true;
     if (with_text) {
-        char* format = "%.2f";
-        int len = snprintf(NULL, 0, format, *value);
+        int prec = layout.sliderTextPrecision;
+
+        char* format = "%.*f";
+        int len = snprintf(NULL, 0, format, prec, *value);
         char *text = new char[len + 1];
-        snprintf(text, len + 1, format, *value);
+        snprintf(text, len + 1, format, prec, *value);
         int yOffset = 5;
         drawText(layout.font, text, slideX, y + yOffset, 1, {0, 0, 0, 1});
         delete[] text;
@@ -190,15 +202,21 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
 }
 
 bool sliderInt(void* id, float x, float y, float w, int* value, int min, int max, char* label = "") {
+    bool result = false;
     int old = *value;
     float val = *value;
+    
+    int prec = layout.sliderTextPrecision;
+    layout.sliderTextPrecision = 0;
 
     if(slider(id, x, y, w, &val, min, max, label)) {
         *value = floor(val + 0.5);
-        return *value != old;
+        result = *value != old;
     }
 
-    return false;
+    layout.sliderTextPrecision = prec;
+
+    return result;
 }
 
 void uiFrameBegin() {

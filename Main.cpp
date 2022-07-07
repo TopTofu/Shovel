@@ -54,7 +54,14 @@ int main() {
         quad({30, 30}, {300, 0}, {0, 300}, {red, green, blue, alpha});
         
         static int x = 5;
-        sliderInt(&x, 300, 300, 400, &x, 0, 10, "some int");
+        sliderInt(&x, 600, 100, 200, &x, 0, 10, "how many quads?");
+
+        for (int i = 0; i < x; i++) {
+            quad({600 + ((float)i * 20), 300}, {15, 0}, {0, 15}, {0.5, 0.2, 0.7, 1});
+        }
+
+        static bool lmao = false;
+        buttonToggle("on", "off", &lmao, 500, 500, 30, 30, &lmao);
 
         uiFrameEnd();
 
