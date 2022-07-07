@@ -143,7 +143,8 @@ bool buttonOutline(char* label, void* id, float x, float y, float w, float h) {
     return button(label, id, x, y, w, h);
 }
 
-bool slider(void* id, float x, float y, float w, float* value, float min, float max) {
+
+bool slider(void* id, float x, float y, float w, float* value, float min, float max, char* label = "") {
     quad({x, y}, {0, 5}, {w, 0}, layout.sliderBase);
 
     float cursorH = 15;
@@ -155,11 +156,6 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
     // draw cursor
     quad({slideX, slideY}, {cursorW, 0}, {0, cursorH}, layout.buttonBase);
 
-    drag(id, &slideX, &slideY, cursorW, cursorH);
-
-    slideX = clamp(slideX, x, x + w);
-    float temp = (slideX - x) * (max - min) / w;
-    
     // draw value text
     bool with_text = true;
     if (with_text) {
@@ -172,9 +168,34 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
         delete[] text;
     }
 
+    // draw label 
+    if (label) {
+        int yOffset = -25;
+        drawText(layout.font, label, x, y + yOffset, 1, {0, 0, 0, 1});
+    }
+
+    // drag logic    
+    drag(id, &slideX, &slideY, cursorW, cursorH);
+
+    // clamp to slider width
+    slideX = clamp(slideX, x, x + w);
+    float temp = (slideX - x) * (max - min) / w;
+
     if (temp != *value) {
         *value = temp;
         return true;
+    }
+
+    return false;
+}
+
+bool sliderInt(void* id, float x, float y, float w, int* value, int min, int max, char* label = "") {
+    int old = *value;
+    float val = *value;
+
+    if(slider(id, x, y, w, &val, min, max, label)) {
+        *value = floor(val + 0.5);
+        return *value != old;
     }
 
     return false;
