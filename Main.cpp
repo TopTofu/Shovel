@@ -2,6 +2,7 @@
 #include <math.h>
 #include <Win32.cpp>
 #include <ui.c>
+#include <Input.c>
 #include <Immediate.cpp>
 #include <Font.cpp>
 

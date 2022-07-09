@@ -5,6 +5,7 @@
 #include <Window.cpp>
 #include <Util.cpp>
 #include <ui.c>
+#include <Input.c>
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
@@ -15,7 +16,15 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
         } break;
 
         case WM_CLOSE: {
-            PostQuitMessage(0); // this will run into our checkForWindowMessage method which results into the main loop to end
+            PostQuitMessage(0); // this will run into our checkForWindowMessage method which results in the main loop to end
+        } break;
+
+        case WM_KEYDOWN: {
+            key_map[wParam] = true;
+        } break;
+
+        case WM_KEYUP: {
+            key_map[wParam] = false;
         } break;
 
         case WM_MOUSEMOVE: {
