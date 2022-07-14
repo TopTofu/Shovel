@@ -4,8 +4,9 @@
 #include <windows.h>
 #include <Window.cpp>
 #include <Util.cpp>
-#include <ui.c>
+#include <text_input.c>
 #include <Input.c>
+#include <ui.c>
 
 LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
@@ -28,7 +29,7 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
         } break;
 
         case WM_CHAR: {
-            
+            type_char(wParam);
         } break;
 
         case WM_MOUSEMOVE: {

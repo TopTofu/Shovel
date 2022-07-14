@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <Win32.cpp>
-#include <ui.c>
 #include <Input.c>
+#include <ui.c>
 #include <Context.c>
 #include <Immediate.cpp>
 #include <Font.cpp>
@@ -57,17 +57,17 @@ int main() {
         sliderInt(&x, 600, 100, 200, &x, 0, 100, "how many quads?");
 
         for (int i = 0; i < x; i++) {
-            quad({600 + ((float)i * 20), 300}, {15, 0}, {0, 15}, {0.5, 0.2, 0.7, 1});
+            quad({600 + ((float)i * 20), 300}, {15, 0}, {0, 15}, {0.5, 0.2, 1, 1});
         }
 
         static bool lmao = false;
         buttonToggle("on", "off", &lmao, 500, 500, 30, 30, &lmao);
 
-        static char* text = "";
+        static string text = new_string(30);
         static int n = 0;
-        static bool* typing = false;
+        static bool active = false;
         static char* placeholder = "some input here"; 
-        textInput(&text, 650, 500, 200, text, &n, &typing, placeholder);
+        textInput(&text, 650, 500, 200, text, &n, &active, placeholder);
 
         uiFrameEnd();
 

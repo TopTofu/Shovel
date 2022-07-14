@@ -220,20 +220,31 @@ bool sliderInt(void* id, float x, float y, float w, int* value, int min, int max
     return result;
 }
 
-bool textInput(void *id, float x, float y, float w, char* text, int* text_n, bool* typing, char* placeholder = "") {
+bool textInput(void *id, float x, float y, float w, string text, int* buffer_index, bool* active, char* placeholder = "") {
     float input_h = 20;
     Color input_color = {0.7, 1, 0.7, 1};
-    quad({x, y}, {w, 0}, {0, input_h}, input_color);
 
-    typing = buttonLogic(id, inRect(x, y, w, input_h));
+    bool state = *active;
+    state = buttonLogic(id, inRect(x, y, w, input_h)) || state; // if active we stay active no matter the buttonLogic
 
-    if (AnyActive() && !isActive(id)) {
-        typing = false;
+    // if something else becomes active, we go passive
+    if (anyActive() && !isActive(id)) state = false;
+    if (key_map[KEY_ESCAPE]) state = false;
+
+    // if we toggled
+    if (state != *active) {
+        if (state) listen_to_text_input(text.data, text.size, buffer_index);
+        else release_buffer(text.data);
+        *active = state;
     }
 
-    if (typing) {
-
+    if (*active) {
+        if (key_map[KEY_BACK]) remove_last(text.data);
     }
+
+    quad({x, y}, {w, 0}, {0, input_h}, (*active) ? lighten(input_color) : input_color);
+    drawText(layout.font, text.data, x, y, 1, {0, 0, 0, 1});
+    if (!text.data) drawText(layout.font, placeholder, x, y, 1, {0, 0, 0, 0.5});
 
     return false;
 }
