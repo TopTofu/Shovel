@@ -3,13 +3,13 @@
 #include <Win32.cpp>
 #include <ui.c>
 #include <Input.c>
+#include <Context.c>
 #include <Immediate.cpp>
 #include <Font.cpp>
 
 int main() {
     initMainWindow();
 
-    float i = 0;
     float x = 50;
     float y = 50;
 
@@ -20,8 +20,7 @@ int main() {
         glClearColor(0.1, 0.4, 0.4, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //immediateQuad({(float)sin(i * 0.001) * 100 + (MainWindow.width / 2.f), (float)cos(i * 0.001) * 100 + (MainWindow.height / 2.f)}, {0, 50}, {50, 0}, {1, 0.5, 0.5, 1});
-        i++;
+        update_context();
 
         uiFrameBegin();
 
@@ -55,7 +54,7 @@ int main() {
         quad({30, 30}, {300, 0}, {0, 300}, {red, green, blue, alpha});
         
         static int x = 5;
-        sliderInt(&x, 600, 100, 200, &x, 0, 10, "how many quads?");
+        sliderInt(&x, 600, 100, 200, &x, 0, 100, "how many quads?");
 
         for (int i = 0; i < x; i++) {
             quad({600 + ((float)i * 20), 300}, {15, 0}, {0, 15}, {0.5, 0.2, 0.7, 1});
@@ -63,6 +62,12 @@ int main() {
 
         static bool lmao = false;
         buttonToggle("on", "off", &lmao, 500, 500, 30, 30, &lmao);
+
+        static char* text = "";
+        static int n = 0;
+        static bool* typing = false;
+        static char* placeholder = "some input here"; 
+        textInput(&text, 650, 500, 200, text, &n, &typing, placeholder);
 
         uiFrameEnd();
 

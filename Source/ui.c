@@ -28,6 +28,7 @@ struct InterfaceLayout {
     
     Color buttonBase = {1, 0.5, 0.5, 1};
     Color sliderBase = {0.2, 0.2, 0.2, 1};
+    Color sliderCursor = {0.3, 0.7, 0.7, 1};
     BitmapFontInfo* font;
 
     int textPadX = 5;
@@ -164,7 +165,7 @@ bool slider(void* id, float x, float y, float w, float* value, float min, float 
     float slideY = y - cursorH / 2.f;
 
     // draw cursor
-    quad({slideX, slideY}, {cursorW, 0}, {0, cursorH}, layout.buttonBase);
+    quad({slideX, slideY}, {cursorW, 0}, {0, cursorH}, layout.sliderCursor);
 
     // draw value text
     bool with_text = true;
@@ -217,6 +218,24 @@ bool sliderInt(void* id, float x, float y, float w, int* value, int min, int max
     layout.sliderTextPrecision = prec;
 
     return result;
+}
+
+bool textInput(void *id, float x, float y, float w, char* text, int* text_n, bool* typing, char* placeholder = "") {
+    float input_h = 20;
+    Color input_color = {0.7, 1, 0.7, 1};
+    quad({x, y}, {w, 0}, {0, input_h}, input_color);
+
+    typing = buttonLogic(id, inRect(x, y, w, input_h));
+
+    if (AnyActive() && !isActive(id)) {
+        typing = false;
+    }
+
+    if (typing) {
+
+    }
+
+    return false;
 }
 
 void uiFrameBegin() {

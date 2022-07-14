@@ -27,6 +27,10 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
             key_map[wParam] = false;
         } break;
 
+        case WM_CHAR: {
+            
+        } break;
+
         case WM_MOUSEMOVE: {
             ui.mx = LOWORD(lParam);
             ui.my = HIWORD(lParam);
