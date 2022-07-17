@@ -2,7 +2,7 @@
 
 char* buffer = 0;
 int buffer_size = 0;
-int* buffer_index = 0;
+int* buffer_index = 0; // the next index to write at
 
 void listen_to_text_input(char* text, int max_size, int* current_i) {
     buffer = text;
@@ -26,9 +26,21 @@ void release_buffer(char* text) {
 }
 
 char remove_last(char* text) {
-    if (text != buffer || *buffer_index <= 0) return 0;
-    char c = buffer[*buffer_index];
-    buffer[*buffer_index] = '\0';
-    *buffer_index--;
+    int i = *buffer_index - 1; // this is the character we want to delete
+
+    if (text != buffer || i <= 0) 
+        return 0;
+
+    char c = buffer[i];
+    buffer[i] = '\0';
+    
+    (*buffer_index)--;
+    
     return c;
 }
+
+
+
+0 1 2 3 4 5 6 7
+A B C 0 0 - - -
+      ^
