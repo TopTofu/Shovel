@@ -238,13 +238,6 @@ bool textInput(void *id, float x, float y, float w, string text, int* buffer_ind
         *active = state;
     }
 
-    if (*active) {
-        if (key_map[KEY_BACK]) {
-            remove_last(text.data);
-            key_map[KEY_BACK] = false;
-        }
-    }
-
     quad({x, y}, {w, 0}, {0, input_h}, (*active) ? lighten(input_color) : input_color);
 
     if (*text.data)

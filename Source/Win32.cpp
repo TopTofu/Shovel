@@ -22,10 +22,26 @@ LRESULT CALLBACK MainWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM
 
         case WM_KEYDOWN: {
             key_map[wParam] = true;
+
+            Event* e = new Event;
+            e->code = wParam;
+            e->repeat = lParam & 0x40000000; // check if 30th bit is set
+            e->type = KEYBOARD;
+            e->pressed = true;
+
+            post_event(e);
         } break;
 
         case WM_KEYUP: {
             key_map[wParam] = false;
+
+            Event* e = new Event;
+            e->code = wParam;
+            e->repeat = false;
+            e->type = KEYBOARD;
+            e->pressed = false;
+
+            post_event(e);
         } break;
 
         case WM_CHAR: {

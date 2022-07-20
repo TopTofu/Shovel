@@ -10,16 +10,6 @@ void listen_to_text_input(char* text, int max_size, int* current_i) {
     buffer_index = current_i;
 }
 
-bool type_char(char c) {
-    if (!buffer || *buffer_index - 1 >= buffer_size) return false;
-    
-    buffer[*buffer_index] = c;
-    buffer[*buffer_index + 1] = '\0'; 
-    (*buffer_index)++;
-
-    return true;
-}
-
 void release_buffer(char* text) {
     // give pointer to the buffer to not accidentally release a different buffer
     if (text == buffer) buffer = 0;
@@ -28,7 +18,7 @@ void release_buffer(char* text) {
 char remove_last(char* text) {
     int i = *buffer_index - 1; // this is the character we want to delete
 
-    if (text != buffer || i <= 0) 
+    if (text != buffer || i < 0) 
         return 0;
 
     char c = buffer[i];
@@ -39,8 +29,19 @@ char remove_last(char* text) {
     return c;
 }
 
+bool type_char(char c) {
+    if (c == KEY_BACK) {
+        remove_last(buffer);
+    }
 
+    if (!buffer || *buffer_index - 1 >= buffer_size) return false;
+    
+    if (c >= 32 && c <= 126) {
+        buffer[*buffer_index] = c;
+        buffer[*buffer_index + 1] = '\0'; 
+        (*buffer_index)++;
+        return true;
+    }
 
-0 1 2 3 4 5 6 7
-A B C 0 0 - - -
-      ^
+    return true;
+}

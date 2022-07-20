@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <keycodes.c>
 #include <Win32.cpp>
 #include <Input.c>
 #include <ui.c>
@@ -15,6 +16,8 @@ int main() {
 
     initFonts("Resources/Fonts/");
     layout.font = getFont("Bahnschrift_Regular");
+
+    EventBuffer* keyboard_events = listen_to_keyboard();
 
     while (checkForWindowMessage()) {
         glClearColor(0.1, 0.4, 0.4, 0.0);
@@ -70,6 +73,32 @@ int main() {
         textInput(&text, 650, 500, 200, text, &n, &active, placeholder);
 
         uiFrameEnd();
+
+
+        static vec2 pos = {0,0};
+        Event* e = get_next(keyboard_events);
+        while(e) {
+            if (e->pressed) {
+                switch(e->code) {
+                    case KEY_LEFT: {
+                        pos.x -= 5;
+                    } break;
+                    case KEY_RIGHT: {
+                        pos.x += 5;
+                    } break;
+                    case KEY_UP: {
+                        pos.y -= 5;
+                    } break;
+                    case KEY_DOWN: {
+                        pos.y += 5;
+                    } break;
+                }
+            }
+            delete e;
+            e = get_next(keyboard_events);
+        }
+
+        quad(pos, {0, 15}, {15, 0}, {1, 0.5, 0.5, 1});
 
         SwapBuffers(MainWindow.deviceContext);
     }
