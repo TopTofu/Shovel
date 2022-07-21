@@ -41,5 +41,6 @@ inline Color darken(Color c) {
 }
 
 inline Color lighten(Color c) {
-    return clamp({c.r * 1.3f, c.g * 1.3f, c.b * 1.3f, c.a}, 0, 1);
+    float scale = 0.5;
+    return clamp({1 - (scale * (1 - c.r)), 1 - (scale * (1 - c.g)), 1 - (scale * (1 - c.b)), c.a}, 0, 1);
 }
