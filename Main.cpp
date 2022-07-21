@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.c>
 #include <keycodes.c>
 #include <Win32.cpp>
 #include <Input.c>
@@ -7,6 +8,7 @@
 #include <Context.c>
 #include <Immediate.cpp>
 #include <Font.cpp>
+#include <sprite.c>
 
 int main() {
     initMainWindow();
@@ -73,7 +75,6 @@ int main() {
         textInput(&text, 650, 500, 200, text, &n, &active, placeholder);
 
         uiFrameEnd();
-
 
         static vec2 pos = {0,0};
         Event* e = get_next(keyboard_events);
