@@ -112,8 +112,8 @@ bool inRect(int x, int y, int w, int h)
     return (ui.mx >= x && ui.mx <= x + w && ui.my >= y && ui.my <= y + h);
 }
 
-bool button(char* label, void* id, float x, float y, float w, float h) {
-    quad({x, y}, {w, 0}, {0, h}, isHot(id) ? lighten(layout.buttonBase) : layout.buttonBase);
+bool button(char* label, void* id, float x, float y, float w, float h, Color c = layout.buttonBase) {
+    quad({x, y}, {w, 0}, {0, h}, isHot(id) ? lighten(c) : c);
     
     if (label) 
         drawText(layout.font, label, x + layout.textPadX, y + layout.textPadY, 1, {0, 0, 0, 1});

@@ -75,7 +75,7 @@ Event* get_next(EventBuffer* buffer) {
     if (buffer != currBuffer) return 0;
     if (!buffer->first) return 0;
 
-    Event* result = buffer->first;// @TODO will these two lines interfere? will this "overwrite" result?
+    Event* result = buffer->first;
     buffer->first = result->next;
     
     if (buffer->first == buffer->last)

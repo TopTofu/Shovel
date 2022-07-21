@@ -7,6 +7,25 @@
 #include <Context.c>
 #include <Immediate.cpp>
 #include <Font.cpp>
+#include <debug_panel.c>
+
+
+void default_event_handle(EventBuffer* buffer) {
+    Event* e = get_next(buffer);
+    while (e) {
+        if (e->pressed) {
+            switch(e->code) {
+                case KEY_P: {
+                    debug_toggle();
+                } break;
+            }
+        }
+
+
+        delete e;
+        e = get_next(buffer);
+    }
+}
 
 int main() {
     initMainWindow();
@@ -26,22 +45,8 @@ int main() {
         update_context();
 
         uiFrameBegin();
-
-        static char* myID = ":D";
         
-        // layout.buttonBase = {0.3, 0.5, 1, 1};
-        // drag(myID, &x, &y, 130, 50);
-        // button("drag", myID, x, y, 130, 50);
 
-        // layout.buttonBase = {1, 0.5, 0.3, 1};
-        // if (button("to right", ID2(myID), 50, 300, 130, 50)) {
-        //     layout.textPadX += 5;
-        // }
-
-        // if (buttonOutline("to left", ID3(myID), 300, 300, 130, 50)) {
-        //     layout.textPadX -= 5;
-        // }
-        
         static float red = 1;
         slider(&red, 100, 400, 100, &red, 0, 1, "red");
 
@@ -72,33 +77,13 @@ int main() {
         static char* placeholder = "some input here"; 
         textInput(&text, 650, 500, 200, text, &n, &active, placeholder);
 
-        uiFrameEnd();
-
-
-        static vec2 pos = {0,0};
-        Event* e = get_next(keyboard_events);
-        while(e) {
-            if (e->pressed) {
-                switch(e->code) {
-                    case KEY_LEFT: {
-                        pos.x -= 5;
-                    } break;
-                    case KEY_RIGHT: {
-                        pos.x += 5;
-                    } break;
-                    case KEY_UP: {
-                        pos.y -= 5;
-                    } break;
-                    case KEY_DOWN: {
-                        pos.y += 5;
-                    } break;
-                }
-            }
-            delete e;
-            e = get_next(keyboard_events);
+        if (!active) {
+            default_event_handle(keyboard_events);
         }
 
-        quad(pos, {0, 15}, {15, 0}, {1, 0.5, 0.5, 1});
+        debug_panel();
+
+        uiFrameEnd();
 
         SwapBuffers(MainWindow.deviceContext);
     }
