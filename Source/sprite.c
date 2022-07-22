@@ -8,7 +8,7 @@ struct Sprite {
     vec2 dim;
     string name;
     Animation* animation;
-    uint texture;
+    u32 texture;
 };
 
 

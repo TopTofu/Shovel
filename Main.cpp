@@ -48,7 +48,6 @@ int main() {
 
         uiFrameBegin();
         
-
         static float red = 1;
         slider(&red, 100, 400, 100, &red, 0, 1, "red");
 
@@ -78,9 +77,10 @@ int main() {
         static bool active = false;
         static char* placeholder = "some input here"; 
         textInput(&text, 650, 500, 200, text, &n, &active, placeholder);
-
-<<<<<<< HEAD
-        uiFrameEnd();
+        
+        if (!active) {
+            default_event_handle(keyboard_events);
+        }
 
         static vec2 pos = {0,0};
         Event* e = get_next(keyboard_events);
@@ -103,10 +103,6 @@ int main() {
             }
             delete e;
             e = get_next(keyboard_events);
-=======
-        if (!active) {
-            default_event_handle(keyboard_events);
->>>>>>> 190155ef6f7dedda2ec85f16ba90013de5fb8ba3
         }
 
         debug_panel();

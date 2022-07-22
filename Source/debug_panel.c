@@ -44,7 +44,6 @@ void debug_panel() {
         supposed = CLOSED;
     }
 
-    
 
 }
 
