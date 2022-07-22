@@ -3,24 +3,25 @@
 
 enum debug_panel_state {
     OPEN,
-    CLOSED
+    CLOSED,
+    OPENING,
+    CLOSING
 };
 
 debug_panel_state state = CLOSED;
-debug_panel_state supposed = CLOSED;
 
 float x = 0;
 float open_x = 350;
 float toggle_rate = 3000;
 
 void update_openness() {
-    if (supposed == CLOSED) {
+    if (state == CLOSING) {
         x -= context.dt * toggle_rate;
         if (x <= 0) {
-            state = CLOSED; 
+            state = CLOSED;
             x = 0;
         } 
-    } else if (supposed == OPEN) {
+    } else if (state == OPENING) {
         x += context.dt * toggle_rate;
         if (x >= open_x) {
             state = OPEN; 
@@ -30,7 +31,7 @@ void update_openness() {
 } 
 
 void debug_panel() {
-    if (state != supposed) {
+    if (state == OPENING || state == CLOSING) {
         update_openness();
     }
 
@@ -41,13 +42,13 @@ void debug_panel() {
     int close_pad = 5;
     int close_width = 15;
     if (button("", &close_pad, x - close_pad - close_width, close_pad, close_width, close_width, {1, 0, 0, 1})) {
-        supposed = CLOSED;
+        state = CLOSING;
     }
 
 
 }
 
 void debug_toggle() {
-    if (state == OPEN) supposed = CLOSED;
-    else if (state == CLOSED) supposed = OPEN;
+    if (state == OPEN) state = CLOSING;
+    else if (state == CLOSED) state = OPENING;
 }

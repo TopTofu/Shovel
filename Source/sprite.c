@@ -11,8 +11,6 @@ struct Sprite {
     u32 texture;
 };
 
-
-
 void draw_sprite(Sprite* sprite) {
-    
+
 }
