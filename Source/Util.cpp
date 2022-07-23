@@ -89,3 +89,5 @@ char* getFileNameFromPath(char* path) {
 
     return result;
 }
+
+#define assert(t) if(!(t)) log("Assertion Failed! \"%s:%d\"", __FILE__, __LINE__)

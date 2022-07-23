@@ -25,7 +25,6 @@ void default_event_handle(EventBuffer* buffer) {
             }
         }
 
-
         delete e;
         e = get_next(buffer);
     }
@@ -42,13 +41,42 @@ int main() {
 
     EventBuffer* keyboard_events = listen_to_keyboard();
 
+    bitmap* bmp = load_bmp("Resources/Sprites/test.bmp");
+    u32 texture = bitmap_to_texture(bmp);
+
     while (checkForWindowMessage()) {
         glClearColor(0.1, 0.4, 0.4, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         update_context();
+        static float scale = 4;
+
+        {
+            glPushMatrix();
+            glOrtho(0, MainWindow.width, MainWindow.height, 0, 0, 1);
+
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glBegin(GL_QUADS);
+            glColor3f(1,1,1);
+            
+            glTexCoord2f(0, 1);
+            glVertex2f(0, 0);
+
+            glTexCoord2f(1, 1);
+            glVertex2f(bmp->header.width * scale, 0);
+
+            glTexCoord2f(1, 0);
+            glVertex2f(bmp->header.width * scale, bmp->header.height * scale);
+
+            glTexCoord2f(0, 0);
+            glVertex2f(0, bmp->header.height * scale);
+            glEnd();
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glPopMatrix();
+        }
 
         uiFrameBegin();
+        slider(&scale, 10, 500, 200, &scale, 1, 20);
         
         default_event_handle(keyboard_events);
 
