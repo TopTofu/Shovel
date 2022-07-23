@@ -16,6 +16,14 @@ vec2 sub(vec2 a, vec2 b) {
     return {a.x - b.x, a.y - b.y};
 }
 
+vec2 mul(vec2 a, float b) {
+    return {a.x * b, a.y * b};
+}
+
+vec2 mul(vec2 a, vec2 b) {
+    return {a.x * b.x, a.y * b.y};
+}
+
 vec3 add(vec3 a, vec3 b) {
     return {a.x + b.x, a.y + b.y, a.z + b.z};
 }
@@ -23,6 +31,8 @@ vec3 add(vec3 a, vec3 b) {
 vec3 sub(vec3 a, vec3 b) {
     return {a.x - b.x, a.y - b.y, a.z - b.z};
 }
+
+
 
 struct Color {
     float r; float g; float b; float a;

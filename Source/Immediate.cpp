@@ -43,3 +43,26 @@ void quadOutline(vec2 o, vec2 s0, vec2 s1, Color color, Color outline, int width
     glLineWidth(1.0f);
     flush();
 }
+
+void quad_tex(vec2 o, vec2 s0, vec2 s1, u32 texture, float scale = 1) {
+    s0 = mul(s0, scale);
+    s1 = mul(s1, scale);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    begin(GL_QUADS);
+    glColor3f(1, 1, 1);
+    
+    glTexCoord2f(0, 1);
+    glVertex2f(o.x, o.y);
+
+    glTexCoord2f(1, 1);
+    glVertex2f(o.x + s0.x, o.y + s0.y);
+
+    glTexCoord2f(1, 0);
+    glVertex2f(o.x + s0.x + s1.x, o.y + s0.y + s1.y);
+
+    glTexCoord2f(0, 0);
+    glVertex2f(o.x + s1.x, o.y + s1.y);
+
+    flush();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}

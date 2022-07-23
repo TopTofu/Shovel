@@ -49,31 +49,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         update_context();
+
         static float scale = 4;
-
-        {
-            glPushMatrix();
-            glOrtho(0, MainWindow.width, MainWindow.height, 0, 0, 1);
-
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glBegin(GL_QUADS);
-            glColor3f(1,1,1);
-            
-            glTexCoord2f(0, 1);
-            glVertex2f(0, 0);
-
-            glTexCoord2f(1, 1);
-            glVertex2f(bmp->header.width * scale, 0);
-
-            glTexCoord2f(1, 0);
-            glVertex2f(bmp->header.width * scale, bmp->header.height * scale);
-
-            glTexCoord2f(0, 0);
-            glVertex2f(0, bmp->header.height * scale);
-            glEnd();
-            glBindTexture(GL_TEXTURE_2D, 0);
-            glPopMatrix();
-        }
+        quad_tex({50, 50}, {(float)bmp->header.width, 0}, {0, (float)bmp->header.height}, texture, scale);
 
         uiFrameBegin();
         slider(&scale, 10, 500, 200, &scale, 1, 20);
