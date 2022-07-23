@@ -25,7 +25,7 @@ char remove_last(char* text) {
     buffer[i] = '\0';
     
     (*buffer_index)--;
-    
+
     return c;
 }
 
@@ -34,8 +34,9 @@ bool type_char(char c) {
         remove_last(buffer);
     }
 
-    if (!buffer || *buffer_index - 1 >= buffer_size) return false;
-    
+    if (!buffer || *buffer_index - 1 >= buffer_size) 
+        return false;
+
     if (c >= 32 && c <= 126) {
         buffer[*buffer_index] = c;
         buffer[*buffer_index + 1] = '\0'; 

@@ -66,3 +66,4 @@ void quad_tex(vec2 o, vec2 s0, vec2 s1, u32 texture, float scale = 1) {
     flush();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
+

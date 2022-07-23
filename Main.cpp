@@ -1,3 +1,8 @@
+#define u8 unsigned char
+#define u16 unsigned short
+#define u32 unsigned int
+#define u64 unsigned long
+
 #include <stdio.h>
 #include <math.h>
 #include <string.c>
@@ -10,7 +15,7 @@
 #include <Font.cpp>
 #include <bitmap.c>
 #include <sprite.c>
-#include <debug_panel.c>
+#include <debug_console.c>
 #include <building.c>
 
 
@@ -19,7 +24,7 @@ void default_event_handle(EventBuffer* buffer) {
     while (e) {
         if (e->pressed) {
             switch(e->code) {
-                case KEY_P: {
+                case KEY_F1: {
                     debug_toggle();
                 } break;
             }
@@ -38,27 +43,20 @@ int main() {
 
     initFonts("Resources/Fonts/");
     layout.font = getFont("Bahnschrift_Regular");
+    con.font = layout.font;
 
     EventBuffer* keyboard_events = listen_to_keyboard();
-
-    bitmap* bmp = load_bmp("Resources/Sprites/test.bmp");
-    u32 texture = bitmap_to_texture(bmp);
 
     while (checkForWindowMessage()) {
         glClearColor(0.1, 0.4, 0.4, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        default_event_handle(keyboard_events);
+
+        uiFrameBegin();
 
         update_context();
 
-        static float scale = 4;
-        quad_tex({50, 50}, {(float)bmp->header.width, 0}, {0, (float)bmp->header.height}, texture, scale);
-
-        uiFrameBegin();
-        slider(&scale, 10, 500, 200, &scale, 1, 20);
-        
-        default_event_handle(keyboard_events);
-
-        debug_panel();
+        debug_console();
 
         uiFrameEnd();
 

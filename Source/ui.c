@@ -155,6 +155,36 @@ bool buttonToggle(char* label1, char* label2, void* id, float x, float y, float 
     return result;
 }
 
+
+bool button_tex(char* label, void* id, float x, float y, float w, float h, u32 tex) {
+    // @NOTE yea ehm.. dont use this, its not fun
+    float v = isHot(id) ? 0.5 : 0;
+
+    glBindTexture(GL_TEXTURE_2D, tex);
+    begin(GL_QUADS);
+    glColor3f(1, 1, 1);
+    
+    glTexCoord2f(0, v + 0.5);
+    glVertex2f(x, y);
+
+    glTexCoord2f(1, v + 0.5);
+    glVertex2f(x + w, y);
+
+    glTexCoord2f(1, v);
+    glVertex2f(x + w, y + h);
+
+    glTexCoord2f(0, v);
+    glVertex2f(x, y + h);
+
+    flush();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    if (label) 
+        drawText(layout.font, label, x + layout.textPadX, y + layout.textPadY, 1, {0, 0, 0, 1});
+
+    return buttonLogic(id, inRect(x, y, w, h));
+}
+
 bool slider(void* id, float x, float y, float w, float* value, float min, float max, char* label = "") {
     quad({x, y}, {0, 5}, {w, 0}, layout.sliderBase);
 

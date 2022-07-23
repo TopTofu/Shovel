@@ -1,10 +1,5 @@
 #pragma once
 
-#define u8 unsigned char
-#define u16 unsigned short
-#define u32 unsigned int
-#define u64 unsigned long
-
 void log(char* format, ...) {
     size_t len = strlen(format);
     char* buffer = new char[len + 2];
@@ -91,3 +86,4 @@ char* getFileNameFromPath(char* path) {
 }
 
 #define assert(t) if(!(t)) log("Assertion Failed! \"%s:%d\"", __FILE__, __LINE__)
+#define assert_c(t, c) if(!(t)) log("Assertion Failed! \"%s:%d\" -> %s", __FILE__, __LINE__, c)

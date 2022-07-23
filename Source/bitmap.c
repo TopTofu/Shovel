@@ -1,3 +1,4 @@
+#pragma once
 
 #pragma pack(push , 1)
 struct bitmap_file_header {
@@ -53,33 +54,34 @@ bitmap* load_bmp(char* path) {
 
     fread(&header, sizeof(bitmap_header), 1, file);
 
-    if (header.colors_used > 0) {
-        u8* colors = new u8[header.colors_used * 4];
-        fread(colors, sizeof(u8), header.colors_used * 4, file);
-        assert(header.bit_per_pixel == 8);
-        data = new u8[header.image_size * 4]; // @NOTE this is only correct if header.bit_per_pixel == 8
-        for (int i = 0; i < header.image_size; i++) {
-            u8 pixel_index = i * 4;
-            u8 color_index = fgetc(file);
+    // if (header.colors_used > 0) {
+    //     u8* colors = new u8[header.colors_used * 4];
+    //     fread(colors, sizeof(u8), header.colors_used * 4, file);
+    //     assert(header.bit_per_pixel == 8);
+    //     data = new u8[header.image_size * 4]; // @NOTE this is only correct if header.bit_per_pixel == 8
+    //     for (int i = 0; i < header.image_size; i++) {
+    //         u8 pixel_index = i * 4;
+    //         u8 color_index = fgetc(file);
 
-            // swap red and blue
-            data[pixel_index]     = colors[color_index + 2];
-            data[pixel_index + 1] = colors[color_index + 1];
-            data[pixel_index + 2] = colors[color_index];
-            data[pixel_index + 3] = colors[color_index + 3];
-        }
-    } else {
-        data = new unsigned char[header.image_size];
-        fseek(file, file_header.data_offset, SEEK_SET);
-        fread(data, header.image_size, 1, file);
+    //         // swap red and blue
+    //         data[pixel_index]     = colors[color_index + 2];
+    //         data[pixel_index + 1] = colors[color_index + 1];
+    //         data[pixel_index + 2] = colors[color_index];
+    //         data[pixel_index + 3] = colors[color_index + 3];
+    //     }
 
-        // swap red and blue channels (bitmaps are BGR)
-        unsigned char temp;
-        for (int i = 0; i < header.image_size; i+=3) {
-            temp = data[i];
-            data[i] = data[i + 2];
-            data[i + 2] = temp;
-        }
+    assert_c(header.colors_used == 0, "We dont parse color tables (yet).");    
+
+    data = new unsigned char[header.image_size];
+    fseek(file, file_header.data_offset, SEEK_SET);
+    fread(data, header.image_size, 1, file);
+
+    // swap red and blue channels (bitmaps are BGR)
+    unsigned char temp;
+    for (int i = 0; i < header.image_size; i+=3) {
+        temp = data[i];
+        data[i] = data[i + 2];
+        data[i + 2] = temp;
     }
 
     if (!data) {
